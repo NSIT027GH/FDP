@@ -122,6 +122,30 @@ public class UserService : IUserService
         }
     }
 
+    public async Task<int> DeleteUserAsync(int id)
+    {
+
+        try
+        {
+            var otherData = await _iUserRepo.GetAll();
+            //var odata = await _iUserRepo.GetById(id);
+            var data = otherData.Where(where => where.UserId == id).FirstOrDefault();
+            
+            if (data != null)
+            {
+                data.UpdationDatetime = DateTime.Now;
+                data.UpdationBy = _loginService.GetUserId() ?? 0;
+                data.Status = (int)TaskStatusEnum.UserStatus.Inactive;
+                return await _iUserRepo.Update(data);
+            }
+            return 0;
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
     public async Task<int> CreateUser(UserCreateRequestModel userCreateRequest)
     {
         userCreateRequest.Password = Convert.ToBase64String(Encoding.UTF8.GetBytes(userCreateRequest.Password));

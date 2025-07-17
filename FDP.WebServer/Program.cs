@@ -1,4 +1,5 @@
 using FDP.WebServer.Components;
+using FDP.WebServer.Components.Service;
 using Radzen;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddRadzenComponents();
+
+builder.Services.AddHttpClient<UserService>(client =>
+{
+    client.BaseAddress = new Uri("https://localhost:44320/api/");
+});
 
 // Add Radzen services
 builder.Services.AddScoped<DialogService>();

@@ -24,6 +24,6 @@ public class TaskStatusEnum
     {
         Active = 1,
         Inactive = 0, 
-        Banned = 2
+        Admin = 2
     }
 }

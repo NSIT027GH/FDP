@@ -42,7 +42,6 @@ public class UserController(IUserService userClass, IMediator mediator, CreateUs
             }
 
         return result is null ? NotFound(new { message = $"User with ID {id} not found." }) : Ok(result);
-
     }
 
     [AllowAnonymous]
@@ -58,6 +57,14 @@ public class UserController(IUserService userClass, IMediator mediator, CreateUs
     [HttpPut]
     [Route("UpdateUserDetails")]
     public async Task<IActionResult> UpdateUserData(UpdateUserCommand command)
+    {
+        var result = await _iMediator.Send(command);
+        return Ok(result);
+    }
+
+    [HttpPut]
+    [Route("DeleteUserDetails")]
+    public async Task<IActionResult> DeleteUserData(DeleteUserCommand command)
     {
         var result = await _iMediator.Send(command);
         return Ok(result);

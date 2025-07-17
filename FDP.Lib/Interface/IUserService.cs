@@ -10,6 +10,7 @@ public interface IUserService
     List<UserDetailsWithAddressResponseModel> GetUserDetails();
     Task<int> UpdateUser(UserUpdateRequestModel usreUpdateRequest);
     Task<int> CreateUser(UserCreateRequestModel userCreateRequestClass);
+    Task<int> DeleteUserAsync(int id);
     Task<UserLoginResponseModel> LoginUser(UserLoginRequestModel userLoginRequestClass);
 
     Task<bool> CheckMailExist(string email);

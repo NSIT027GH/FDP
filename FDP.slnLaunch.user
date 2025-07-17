@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "FDP.API\\FDP.API.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "FDP.WebServer\\FDP.WebServer.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

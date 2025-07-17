@@ -132,6 +132,9 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     services.AddScoped<CreateAddressCommandValidator>();
     services.AddScoped<UpdateAddressCommandHandler>();
     services.AddScoped<UpdateAddressCommandValidator>();
+    services.AddScoped<DeleteUserCommandHandler>();
+    services.AddScoped<LoginUserCommandHandler>();
+    services.AddScoped<LoginUserCommandValidator>();
 
     services.AddTransient(typeof(IPipelineBehavior<,>),typeof(ValidationBehavior<,>));
     // Controller
