@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36221.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FDP.API", "FDP.API\FDP.API.csproj", "{371C3F55-5661-B552-5CFC-1DAE2BA01D5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FDP.Infrastructure", "FDP.Infrastructure\FDP.Infrastructure.csproj", "{CA4CA5A1-D79A-EC8D-11CC-3C74B9EFD723}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FDP.Lib", "FDP.Lib\FDP.Lib.csproj", "{AAEBB378-C18A-A7FD-59DC-6511F3D3269F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FDP.Shared", "FDP.Shared\FDP.Shared.csproj", "{8AB44F51-4A2E-3E03-9B0C-DFE830CDE32D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FDP.Application", "FDP.Application\FDP.Application.csproj", "{092433F4-4B84-409F-8DF2-6B6B7E893121}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FDP.UnitTest", "FDP.UnitTest\FDP.UnitTest.csproj", "{726631CC-BD9D-4C8E-8E44-653B1F6EAF95}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{371C3F55-5661-B552-5CFC-1DAE2BA01D5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{371C3F55-5661-B552-5CFC-1DAE2BA01D5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{371C3F55-5661-B552-5CFC-1DAE2BA01D5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{371C3F55-5661-B552-5CFC-1DAE2BA01D5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA4CA5A1-D79A-EC8D-11CC-3C74B9EFD723}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA4CA5A1-D79A-EC8D-11CC-3C74B9EFD723}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA4CA5A1-D79A-EC8D-11CC-3C74B9EFD723}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA4CA5A1-D79A-EC8D-11CC-3C74B9EFD723}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAEBB378-C18A-A7FD-59DC-6511F3D3269F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAEBB378-C18A-A7FD-59DC-6511F3D3269F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAEBB378-C18A-A7FD-59DC-6511F3D3269F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAEBB378-C18A-A7FD-59DC-6511F3D3269F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AB44F51-4A2E-3E03-9B0C-DFE830CDE32D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AB44F51-4A2E-3E03-9B0C-DFE830CDE32D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AB44F51-4A2E-3E03-9B0C-DFE830CDE32D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AB44F51-4A2E-3E03-9B0C-DFE830CDE32D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{092433F4-4B84-409F-8DF2-6B6B7E893121}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{092433F4-4B84-409F-8DF2-6B6B7E893121}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{092433F4-4B84-409F-8DF2-6B6B7E893121}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{092433F4-4B84-409F-8DF2-6B6B7E893121}.Release|Any CPU.Build.0 = Release|Any CPU
+		{726631CC-BD9D-4C8E-8E44-653B1F6EAF95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{726631CC-BD9D-4C8E-8E44-653B1F6EAF95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{726631CC-BD9D-4C8E-8E44-653B1F6EAF95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{726631CC-BD9D-4C8E-8E44-653B1F6EAF95}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2DA36053-74C6-4D9E-954A-D6CED5E32521}
+	EndGlobalSection
+EndGlobal
