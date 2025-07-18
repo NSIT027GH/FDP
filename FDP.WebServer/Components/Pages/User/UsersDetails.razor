@@ -1,9 +1,8 @@
 ﻿@page "/UsersDetails"
 @using FDP.WebServer.Components.Models
 <h3>UsersDetails</h3>
-@* 
-<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
-                Data="@employees" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or" SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedEmployees>
+
+@* <RadzenDataGrid  AllowColumnResize="true"  PagerHorizontalAlign="HorizontalAlign.Left" Data="@employees" ColumnWidth="300px"  >
     <Columns>
         <RadzenDataGridColumn Property="@nameof(Employee.EmployeeID)" Filterable="false" Title="ID" Frozen="true" Width="80px" TextAlign="TextAlign.Center" />
         <RadzenDataGridColumn Property="@nameof(Employee.FirstName)" Title="First Name" Frozen="true" Width="160px" />
@@ -25,7 +24,6 @@
 
 @code {
     [Parameter]
-    public UserDetails User { get; set; }
-
+    public UserDetails Users { get; set; };
 
 }

@@ -1,0 +1,82 @@
+﻿@page "/restaurant/dashboard/{Tab}"
+@using FDP.WebServer.Components.Service.RestaurantApp
+@inject RestaurantService RestaurantService
+
+<h3>Dashboard</h3>
+<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="0.5rem" class="rz-p-sm-12">
+    <RadzenLabel Text="Select Cuisine" Component="DropDownBindValue" />
+    <RadzenDropDown @bind-Value="@selectedIndex" Data="@tabs" TextProperty="Name" ValueProperty="Index" TValue="int" Style="width: 100%; max-width: 400px;" />
+</RadzenStack>
+<RadzenTabs TabPosition="TabPosition.Top" @bind-SelectedIndex=@selectedIndex RenderMode="TabRenderMode.Client">
+    <Tabs >
+        <RadzenTabsItem Text="Grid">
+            <DataGrid></DataGrid>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Splitter">
+            <Spliter></Spliter>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Google Map">
+            <RadzenGoogleMap Zoom="4" Style="height:500px" Center="@(new GoogleMapPosition { Lat = 39.5, Lng = -98.35 })">
+                @foreach (var r in restaurants)
+                {
+                    <RadzenGoogleMapMarker Position="@(new GoogleMapPosition { Lat = r.Latitude, Lng = r.Longitude })" Title="@r.Name" />
+                }
+            </RadzenGoogleMap>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Drop Zone">
+            <DropZone></DropZone>
+        </RadzenTabsItem>
+    </Tabs>
+</RadzenTabs>
+
+@code {
+    List<Restaurant> restaurants;
+    List<string> cuisines;
+    Restaurant demo = new Restaurant();
+    string selectedCuisine = "Mexican";
+    DateTime selectedDate = DateTime.Today;
+    public class TabItem
+    {
+        public string Name { get; set; }
+        public int Index { get; set; }
+    }
+    List<TabItem> tabs = new()
+    {
+        new TabItem { Name = "Grid", Index = 0 },
+        new TabItem { Name = "Splitter", Index = 1 },
+        new TabItem { Name = "Google Map", Index = 2 },
+        new TabItem { Name = "Drop Zone", Index = 3 }
+    };
+    // List<(string,int)> tabs = new List<(string,int)>
+    // {
+    //     ("Grid",0), ("Splitter",1), ("Google Map",2) , ("Drop Zone",3)
+    // };
+    [Parameter]
+    public string Tab { get; set; }
+
+    int selectedIndex = 0;
+
+
+    protected override void OnInitialized()
+    {
+        restaurants = RestaurantService.GetRestaurants();
+        cuisines = RestaurantService.GetCuisines();
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        GetSelectedItem();
+    }
+
+    private void GetSelectedItem()
+        => selectedIndex = Tab switch
+        {
+            "Grid" => 0,
+            "Splitter" => 1,
+            "GoogleMap" => 2,
+            "DropZone" => 3,
+            _ => -1 // default/fallback if Tab doesn't match
+        };
+
+}

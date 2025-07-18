@@ -11,7 +11,9 @@
         </div>
 
         <article class="content px-4">
-            @Body
+            <ErrorBoundary>
+                @Body
+            </ErrorBoundary>
         </article>
     </main>
 </div>
@@ -24,5 +26,3 @@
 
 <RadzenDialog />
 <RadzenNotification />
-<RadzenTooltip />
-<RadzenContextMenu />

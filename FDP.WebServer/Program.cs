@@ -1,5 +1,7 @@
 using FDP.WebServer.Components;
 using FDP.WebServer.Components.Service;
+using FDP.WebServer.Components.Service.RestaurantApp;
+using Microsoft.AspNetCore.Components.Server;
 using Radzen;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +15,7 @@ builder.Services.AddHttpClient<UserService>(client =>
 {
     client.BaseAddress = new Uri("https://localhost:44320/api/");
 });
+builder.Services.AddSingleton<RestaurantService>();
 
 // Add Radzen services
 builder.Services.AddScoped<DialogService>();
@@ -37,5 +40,8 @@ app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
-
+//builder.Services.Configure<CircuitOptions>(options =>
+//{
+//    options.DetailedErrors = true;
+//});
 app.Run();

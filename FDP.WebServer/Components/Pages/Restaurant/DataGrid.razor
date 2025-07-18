@@ -1,0 +1,28 @@
+﻿@page "/grid"
+@using FDP.WebServer.Components.Service.RestaurantApp
+@inject RestaurantService RestaurantService
+
+<h3>DataGrid</h3>
+<RadzenDataGrid Data="@restaurants" TItem="Restaurant" ColumnWidth="200px">
+    <Columns>
+        <RadzenDataGridColumn TItem="Restaurant" Property="Name" Title="Name" />
+        <RadzenDataGridColumn TItem="Restaurant" Property="Cuisine" Title="Cuisine" />
+        <RadzenDataGridColumn TItem="Restaurant" Property="Location" Title="Location" />
+        <RadzenDataGridColumn TItem="Restaurant" Property="Rating" Title="Rating" />
+        <RadzenDataGridColumn TItem="Restaurant" Property="OpeningDate" Title="Opening Date" />
+    </Columns>
+</RadzenDataGrid>
+
+
+@code {
+    List<Restaurant> restaurants;
+    List<string> cuisines;
+    string selectedCuisine;
+    DateTime selectedDate = DateTime.Today;
+
+    protected override void OnInitialized()
+    {
+        restaurants = RestaurantService.GetRestaurants();
+        cuisines = RestaurantService.GetCuisines();
+    }
+}

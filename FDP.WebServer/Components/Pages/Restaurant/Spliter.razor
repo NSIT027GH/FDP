@@ -1,0 +1,52 @@
+﻿<h3>Spliter</h3>
+@using FDP.WebServer.Components.Service.RestaurantApp
+@inject RestaurantService RestaurantService
+
+<RadzenSplitter Orientation="Orientation.Vertical" style="height: 400px; border: 1px solid rgba(0,0,0,.08);">
+    <RadzenSplitterPane Size="100px">
+        <RadzenSplitter>
+            <RadzenSplitterPane Size="50%" Min="30px" Max="70%" Resizable=true>
+                Pane A1
+                <div style="font-size: 10px;">
+                    50% Min 30px Max 70%
+                </div>
+                <RadzenChart Visible="true">
+                    <RadzenColumnSeries TItem="Restaurant" Data="@restaurants" CategoryProperty="Cuisine" ValueProperty="Rating" Title="Average Ratings" />
+                </RadzenChart>
+            </RadzenSplitterPane>
+            <RadzenSplitterPane>
+                <RadzenChart>
+                    <RadzenDonutSeries Data="@restaurants" CategoryProperty="Cuisine" ValueProperty="Rating" TotalAngle="180" StartAngle="180">
+                        <ChildContent>
+                            <RadzenSeriesDataLabels Visible=true />
+                        </ChildContent>
+                        <TitleTemplate>
+                            <div class="rz-donut-content">
+                                <div>Revenue</div>
+                                <div>for 2024</div>
+                            </div>
+                        </TitleTemplate>
+                    </RadzenDonutSeries>
+                </RadzenChart>
+            </RadzenSplitterPane>
+        </RadzenSplitter>
+    </RadzenSplitterPane>
+    <RadzenSplitterPane Size="100px">
+        <RadzenSplitter>
+        </RadzenSplitter>
+    </RadzenSplitterPane>
+
+</RadzenSplitter>
+
+@code {
+    List<Restaurant> restaurants;
+    List<string> cuisines;
+    string selectedCuisine;
+    DateTime selectedDate = DateTime.Today;
+
+    protected override void OnInitialized()
+    {
+        restaurants = RestaurantService.GetRestaurants();
+        cuisines = RestaurantService.GetCuisines();
+    }
+}
