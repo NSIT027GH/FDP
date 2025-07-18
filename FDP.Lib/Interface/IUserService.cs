@@ -6,8 +6,8 @@ namespace FDP.Lib;
 public interface IUserService
 {
     Task<UserDetailsResponseModel?> GetUserById(int id);
-    Task<List<UserDetailsResponseModel>> GetUser();
-    List<UserDetailsWithAddressResponseModel> GetUserDetails();
+    Task<List<UserDetailsResponseModel>> GetUserDetails();
+    List<UserDetailsWithAddressResponseModel> GetUsers();
     Task<int> UpdateUser(UserUpdateRequestModel usreUpdateRequest);
     Task<int> CreateUser(UserCreateRequestModel userCreateRequestClass);
     Task<int> DeleteUserAsync(int id);

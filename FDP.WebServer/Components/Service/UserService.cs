@@ -8,7 +8,7 @@ namespace FDP.WebServer.Components.Service;
 public class UserService
 {
     private readonly HttpClient _httpClient;
-    private readonly string _httpURL = ""; // Replace with your actual API URL
+    private readonly string _httpURL = "https://localhost:44320/api/User"; // Replace with your actual API URL
     public UserService(HttpClient httpClient)
     {
         _httpClient = httpClient;

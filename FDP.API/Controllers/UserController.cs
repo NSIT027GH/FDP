@@ -4,24 +4,35 @@ using FDP.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace FDP.API.Controllers;
 
-[Authorize]
+//[Authorize]
 [Route("api/[controller]")]
 [ApiController]
-public class UserController(IUserService userClass, IMediator mediator, CreateUserCommandHandler createUserHandler) : ControllerBase
+public class UserController(IUserService userClass, IMediator mediator, GetUsersQueryHandler getUsersQueryHandler) : ControllerBase
 {
     private readonly IUserService _userService = userClass;
     private readonly IMediator _iMediator = mediator;
-    private readonly CreateUserCommandHandler _createUserHandler = createUserHandler;
+    private readonly GetUsersQueryHandler _getUsersQueryHandler = getUsersQueryHandler;
 
 
     [HttpGet]
-    [Route("GetUserDetails")]
-    public IActionResult GetUser()
+    [Route("GetUserDetailsWithAddress")]
+    public IActionResult GetUsersWithAddress()
     {
         var result =  _userService.GetUserDetails();
+        return Ok(result);
+    }
+
+    [HttpGet]
+    [Route("GetUserDetails")]
+    public async Task<IActionResult> GetUser()
+    {
+        //var result =  _userService.GetUserDetails();
+        //var result = await _getUsersQueryHandler.Handle(new GetUsersQuery(), new CancellationToken());
+        var result = await _iMediator.Send(new GetUsersQuery());
         return Ok(result);
     }
 

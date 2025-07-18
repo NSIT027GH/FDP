@@ -7,7 +7,7 @@ using System.Net;
 
 namespace FDP.API.Controllers;
 
-[Authorize]
+//[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class AddressController(IAddressService iAddressService, GetAddressQueryHandler getAddressQueryHandler, GetAddressByIdQueryHandler getAddressByIdHandler, GetAddressByUserIdQueryHandler getAddressByUserIdHandler, CreateAddressCommandValidator createAddressCommandValidations, GetAddressByUserIdQueryValidator getAddressByUserIdQueryValidations, GetAddressByIdQueryValidator getAddressByIdQueryValidations, CreateAddressCommandHandler createAddressHandler, UpdateAddressCommandValidator updateAddressCommandValidations, UpdateAddressCommandHandler updateAddressHandler) : ControllerBase

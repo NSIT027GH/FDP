@@ -45,7 +45,7 @@ public class UserService : IUserService
             return null;
     }
 
-    public async Task<List<UserDetailsResponseModel>> GetUser()
+    public async Task<List<UserDetailsResponseModel>> GetUserDetails()
     {
         var data = await _iUserRepo.GetAll();
 
@@ -56,7 +56,7 @@ public class UserService : IUserService
 
         return _mapper.Map<List<User>, List<UserDetailsResponseModel>>(data);
     }
-    public List<UserDetailsWithAddressResponseModel> GetUserDetails()
+    public List<UserDetailsWithAddressResponseModel> GetUsers()
     {
 
         var result = from u in _dbContext.Users

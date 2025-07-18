@@ -1,7 +1,143 @@
-﻿<h3>DialogCardPage</h3>
+﻿@page "/dialog-card-page"
+@inject DialogService dialogService
+@using FDP.WebServer.Components.Models
+@using FDP.WebServer.Components.Service
+@inject UserService userService
 
+<RadzenTemplateForm Data="@user" Submit="@((UserDetails args) => { Submit(args); })">
+    <RadzenFieldset Text="User Info">
+        <RadzenStack Gap="1rem">
+            <RadzenRow AlignItems="AlignItems.Center">
+                <RadzenColumn Size="12" SizeMD="4">
+                    <RadzenLabel Text="First Name" Component="FirstName" />
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeMD="8">
+                    <RadzenTextBox @bind-Value="user.FirstName" Style="width: 100%;" Name="FirstName" />
+                    <RadzenRequiredValidator Component="FirstName" Text="First name is required" />
+                    <RadzenLengthValidator Component="FirstName" Min="3" Text="First name should be at least 3 characters" />
+                    <RadzenLengthValidator Component="FirstName" Max="20" Text="First name should be at most 20 characters" />
+                </RadzenColumn>
+            </RadzenRow>
+
+            <RadzenRow AlignItems="AlignItems.Center">
+                <RadzenColumn Size="12" SizeMD="4">
+                    <RadzenLabel Text="Last Name" Component="LastName" />
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeMD="8">
+                    <RadzenTextBox @bind-Value="user.LastName" Style="width: 100%;" Name="LastName" />
+                    <RadzenRequiredValidator Component="LastName" Text="Last name is required" />
+                    <RadzenLengthValidator Component="LastName" Min="3" Text="Last name should be at least 3 characters" />
+                    <RadzenLengthValidator Component="LastName" Max="20" Text="Last name should be at most 20 characters" />
+                </RadzenColumn>
+            </RadzenRow>
+
+            <RadzenRow AlignItems="AlignItems.Center">
+                <RadzenColumn Size="12" SizeMD="4">
+                    <RadzenLabel Text="Email" Component="Email" />
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeMD="8">
+                    <RadzenTextBox @bind-Value="user.Email" Style="width: 100%;" Name="Email" />
+                    <RadzenRequiredValidator Component="Email" Text="Email is required" />
+                    <RadzenEmailValidator Component="Email" Text="Provide a valid email address" />
+                </RadzenColumn>
+            </RadzenRow>
+
+            <RadzenRow AlignItems="AlignItems.Center">
+                <RadzenColumn Size="12" SizeMD="4">
+                    <RadzenLabel Text="Password" Component="Password" />
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeMD="8">
+                    <RadzenPassword @bind-Value="user.Password" Style="width: 100%;" Name="Password" />
+                    <RadzenRequiredValidator Component="Password" Text="Enter password" />
+                </RadzenColumn>
+            </RadzenRow>
+
+            <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                <RadzenColumn Size="12" SizeMD="4">
+                    <RadzenLabel Text="Repeat Password" Component="RepeatPassword" />
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeMD="8">
+                    <RadzenPassword Name="RepeatPassword" @bind-Value="@user.Password" Style="display: block; width: 100%" />
+                    <RadzenRequiredValidator Component="RepeatPassword" Text="Repeat your password" />
+                    <RadzenCompareValidator Visible=@(!string.IsNullOrEmpty(user.Password)) Value=@user.Password Component="RepeatPassword" Text="Passwords should be the same" />
+                </RadzenColumn>
+            </RadzenRow>
+
+            <RadzenRow AlignItems="AlignItems.Center">
+                <RadzenColumn Size="12" SizeMD="4">
+                    <RadzenLabel Text="Phone Number" Component="PhoneNumber" />
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeMD="8">
+                    <RadzenNumeric TValue="long" Style="width: 100%;" Name="PhoneNumber" />
+                    <RadzenRequiredValidator Component="PhoneNumber" Text="PhoneNumber is required" />
+                    <RadzenRegexValidator Component="PhoneNumber" Text="PhoneNumber must be 10 digits" Pattern="\d{10}" />
+                </RadzenColumn>
+            </RadzenRow>
+
+            <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" class="rz-mt-6">
+                <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Save" />
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Text="Cancel" Click="OnCancel"/>
+            </RadzenStack>
+        </RadzenStack>
+    </RadzenFieldset>
+    <RadzenButton Text="Call Back" Size="ButtonSize.Medium" Style="btn btn-info" @onclick="GetInfo" />
+</RadzenTemplateForm>
 
 
 @code {
+    [Parameter]
+    public UserDetails user { get; set; }
+    [Parameter]
+    public bool isSignUp { get; set; } = false;
+    [Parameter]
+    public EventCallback<(UserDetails, Guid)> OnInfo { get; set; }
+    [Parameter]
+    public bool isUpdate { get; set; } = false;
+    protected override void OnInitialized()
+    {
+        user ??= new UserDetails();
+    }
+    public void OnCancel() => dialogService.Close(null);
+
+    public async Task Submit(UserDetails arg)
+    {
+        object args = new object();
+        if (isUpdate) // Update User
+        {
+            var user = await userService.UpdateUserData(MapToUpdateRequest(arg));
+        }
+        else // Add User
+        {
+            var user = await userService.AddUserData(MapToAddRequest(arg));
+        }
+        dialogService.Close(args);
+    }
+    private async Task GetInfo()
+    {
+        await OnInfo.InvokeAsync((user, Guid.NewGuid()));
+        dialogService.Close(null);
+    }
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+    }
+    private AddUserRequest MapToAddRequest(UserDetails arg) => new()
+    {
+        FirstName = arg.FirstName,
+        LastName = arg.LastName,
+        Email = arg.Email,
+        Password = arg.Password,
+        PhoneNumber = arg.PhoneNumber
+    };
+
+    private UpdateUserRequest MapToUpdateRequest(UserDetails arg) => new()
+    {
+        UserId = arg.UserId,
+        FirstName = arg.FirstName,
+        LastName = arg.LastName,
+        Email = arg.Email,
+        Password = arg.Password,
+        PhoneNumber = arg.PhoneNumber
+    };
 
 }

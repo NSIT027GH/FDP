@@ -1,7 +1,7 @@
 ﻿using FDP.Lib;
 using FluentValidation;
 
-namespace FDP.Application.User.Command.CreateUser;
+namespace FDP.Application.User;
 
 public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
 {

@@ -1,23 +1,44 @@
-﻿
+﻿using FDP.Lib;
+using FDP.Shared;
+using MediatR;
+using System.Net;
 
-//using FDP.Lib;
-//using FDP.Shared.ResponseModelClass;
-//using MediatR;
+namespace FDP.Application.User;
 
-//namespace FDP.Application.User.Query.GetUsersQuery
-//{
-//    public class GetUsersQueryHandler : IRequestHandler<UserDetailsWithAddressResponseModel>
-//    {
-//        private readonly IUserService _iUserService;
-//        public GetUsersQueryHandler(IUserService userService)
-//        {
-//            _iUserService = userService;
-//        }
+public record GetUsersQuery : IRequest<ApiResponse<object>>;
+public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, ApiResponse<object>>    
+{
+    private readonly IUserService _iUserService;
+    public GetUsersQueryHandler(IUserService userService)
+    {
+        _iUserService = userService;
+    }
 
-//        private UserDetailsWithAddressResponseModel Handle()
-//        {
+    public async Task<ApiResponse<object>> Handle(GetUsersQuery query, CancellationToken ctn)
+    {
+        var userDetails = await _iUserService.GetUserDetails();
+        try
+        {
+            if (userDetails.Count == 0)
+            {
+                throw new Exception($"Users not found.");
+            }
 
-//            var result = _iUserService.GetUserDetails();
-//        }
-//    }
-//}
+            return new ApiResponse<object>
+            {
+                Data = userDetails,
+                Message = "User details retrieved successfully",
+                StatusCode = (int)HttpStatusCode.OK
+            };
+        }
+        catch (Exception ex)
+        {
+            return new ApiResponse<object>
+            {
+                Data = null,
+                Message = "Exception occurred!" + ex.Message,
+                StatusCode = (int)HttpStatusCode.InternalServerError
+            };
+        }
+    }
+}

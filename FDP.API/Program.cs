@@ -2,7 +2,6 @@ using FDP.API;
 using FDP.Application;
 using FDP.Application.Address;
 using FDP.Application.User;
-using FDP.Application.User.Command.CreateUser;
 using FDP.Infrastructure;
 using FDP.Lib;
 using FDP.Shared;
@@ -132,6 +131,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     services.AddScoped<CreateAddressCommandValidator>();
     services.AddScoped<UpdateAddressCommandHandler>();
     services.AddScoped<UpdateAddressCommandValidator>();
+    services.AddScoped<GetUsersQueryHandler>();
     services.AddScoped<DeleteUserCommandHandler>();
     services.AddScoped<LoginUserCommandHandler>();
     services.AddScoped<LoginUserCommandValidator>();

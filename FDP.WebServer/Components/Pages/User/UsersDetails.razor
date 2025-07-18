@@ -1,29 +1,139 @@
-﻿@page "/UsersDetails"
+﻿@page "/UsersDetails";
+@using FDP.WebServer.Components.Layout
 @using FDP.WebServer.Components.Models
-<h3>UsersDetails</h3>
+@using FDP.WebServer.Components.Service
+@using System.Text.Json
+@inject UserService UserService
+@inject DialogService dialogService
+@inject NotificationService notificationService
+@inject IJSRuntime JSRuntime
 
-@* <RadzenDataGrid  AllowColumnResize="true"  PagerHorizontalAlign="HorizontalAlign.Left" Data="@employees" ColumnWidth="300px"  >
+<h3>UsersDetails</h3>
+<RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Size="ButtonSize.Medium" Text="Add User" Click="@(() => Submit())" />
+<RadzenDataGrid AllowColumnResize="true" PagerHorizontalAlign="HorizontalAlign.Left" Data="@Users" TItem="UserDetails" ColumnWidth="200px">
+    <Template Context="customer">
+        @* <RadzenDataGrid AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@customer.Orders" Render="@OnOrdersDataGridRender">
+            <Template Context="order">
+                <RadzenCard Variant="Variant.Text" class="rz-background-color-primary-lighter rz-color-on-primary-lighter rz-m-4">
+                    Company:
+                    <b>@customer.CompanyName</b>
+                </RadzenCard>            
+            </Template>
+        </RadzenDataGrid> *@
+    </Template>
     <Columns>
-        <RadzenDataGridColumn Property="@nameof(Employee.EmployeeID)" Filterable="false" Title="ID" Frozen="true" Width="80px" TextAlign="TextAlign.Center" />
-        <RadzenDataGridColumn Property="@nameof(Employee.FirstName)" Title="First Name" Frozen="true" Width="160px" />
-        <RadzenDataGridColumn Property="@nameof(Employee.LastName)" Title="Last Name" Width="160px" />
-        <RadzenDataGridColumn Property="@nameof(Employee.Title)" Title="Job Title" Width="200px" />
-        <RadzenDataGridColumn Property="@nameof(Employee.TitleOfCourtesy)" Title="Title" Width="120px" />
-        <RadzenDataGridColumn Property="@nameof(Employee.BirthDate)" Title="Birth Date" FormatString="{0:d}" Width="160px" />
-        <RadzenDataGridColumn Property="@nameof(Employee.HireDate)" Title="Hire Date" FormatString="{0:d}" Width="160px" />
-        <RadzenDataGridColumn Property="@nameof(Employee.Address)" Title="Address" Width="200px" />
-        <RadzenDataGridColumn Property="@nameof(Employee.City)" Title="City" Width="160px" />
-        <RadzenDataGridColumn Property="@nameof(Employee.Region)" Title="Region" Width="160px" />
-        <RadzenDataGridColumn Property="@nameof(Employee.PostalCode)" Title="Postal Code" Width="160px" />
-        <RadzenDataGridColumn Property="@nameof(Employee.Country)" Title="Country" Width="160px" />
-        <RadzenDataGridColumn Property="@nameof(Employee.HomePhone)" Title="Home Phone" Width="160px" />
-        <RadzenDataGridColumn Property="@nameof(Employee.Extension)" Title="Extension" Width="160px" />
-        <RadzenDataGridColumn Property="@nameof(Employee.Notes)" Title="Notes" Width="300px" />
+        <RadzenDataGridColumn Title="Action" Width="70px">
+            <Template Context="users">
+                @* <RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Variant="Variant.Flat" Size="ButtonSize.Medium" Shade="Shade.Lighter" Click="@(() => InsertAfterRow(order))" title="Add new row after this row" /> *@
+                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="@(() => Submit(users))" />
+                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Flat" Size="ButtonSize.Medium" Shade="Shade.Lighter" Click="@(() => DeleteUser(users))" />
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="FirstName" Title="First Name" Frozen="true" Width="150px" />
+        <RadzenDataGridColumn Property="LastName" Title="Last Name" Width="150px" />
+        <RadzenDataGridColumn Property="PhoneNumber" Title="Phone Number" Width="100px" />
+        <RadzenDataGridColumn Property="Email" Title="Email" Width="120px" />
+        <RadzenDataGridColumn Property="Password" Title="Password" Width="150px" />
+
     </Columns>
-</RadzenDataGrid> *@
+</RadzenDataGrid>
 
 @code {
     [Parameter]
-    public UserDetails Users { get; set; };
+    public List<UserDetails> Users { get; set; }
+    DialogSettings _settings;
+    public DialogSettings Settings
+    {
+        get
+        {
+            return _settings;
+        }
+        set
+        {
+            if (_settings != value)
+            {
+                _settings = value;
+                InvokeAsync(SaveStateAsync);
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Users = await UserService.GetUserAsync();
+    }
+
+    public async Task Submit(UserDetails user = null)
+    {
+        await LoadStateAsync();
+
+        var response = await dialogService.OpenAsync<DialogCardPage>(
+               title: $"Users {(user != null ? user.FirstName : "New User")}",
+               parameters: new Dictionary<string, object>()
+                {
+                    { "User", user ?? new UserDetails() },
+                    { "OnInfo", EventCallback.Factory.Create<(UserDetails, Guid)>(this, InfoUser) },
+                    { "isSignUp", false }
+                },
+               options: new DialogOptions()
+               {
+                   Width = Settings != null ? Settings.Width : "700px",
+                   Height = Settings != null ? Settings.Height : "512px",
+                   Left = Settings != null ? Settings.Left : null,
+                   Top = Settings != null ? Settings.Top : null
+               });
+        if (response != null)
+        {
+
+            NotificationMessage message = new NotificationMessage
+            {
+                Severity = NotificationSeverity.Error,
+                Summary = "Error Summary",
+                Detail = "Error Detail",
+                Duration = 4000
+            };
+            notificationService.Notify(message);
+        }
+
+        await SaveStateAsync();
+    }
+
+    public async Task DeleteUser(UserDetails user)
+    {
+        // Implement the logic to edit the user
+        // This could involve navigating to a different page or opening a dialog
+        // For example:
+        // await DialogService.OpenAsync<EditUserDialog>("Edit User", new Dictionary<string, object>() { { "User", user } });
+    }
+
+    private async Task InfoUser((UserDetails, Guid) data)
+    {
+        Console.WriteLine($"User info callback: {data.Item1.FirstName}");
+        NotificationMessage message = new NotificationMessage
+        {
+            Severity = NotificationSeverity.Info,
+            Summary = "User Summary",
+            Detail = data.Item1.FirstName + " " + data.Item2,
+            Duration = 4000
+        };
+
+    }
+    private async Task LoadStateAsync()
+    {
+        await Task.CompletedTask;
+
+        var result = await JSRuntime.InvokeAsync<string>("window.localStorage.getItem", "DialogSettings");
+        if (!string.IsNullOrEmpty(result))
+        {
+            _settings = JsonSerializer.Deserialize<DialogSettings>(result);
+        }
+    }
+
+    private async Task SaveStateAsync()
+    {
+        await Task.CompletedTask;
+
+        await JSRuntime.InvokeVoidAsync("window.localStorage.setItem", "DialogSettings", JsonSerializer.Serialize<DialogSettings>(Settings));
+    }
 
 }
