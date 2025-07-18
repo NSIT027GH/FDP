@@ -1,6 +1,7 @@
 ﻿@page "/restaurant/dashboard/{Tab}"
 @using FDP.WebServer.Components.Service.RestaurantApp
-@inject RestaurantService RestaurantService
+@inject RestaurantService restaurantService
+@inject NavigationManager navigation
 
 <h3>Dashboard</h3>
 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="0.5rem" class="rz-p-sm-12">
@@ -8,12 +9,12 @@
     <RadzenDropDown @bind-Value="@selectedIndex" Data="@tabs" TextProperty="Name" ValueProperty="Index" TValue="int" Style="width: 100%; max-width: 400px;" />
 </RadzenStack>
 <RadzenTabs TabPosition="TabPosition.Top" @bind-SelectedIndex=@selectedIndex RenderMode="TabRenderMode.Client">
-    <Tabs >
+    <Tabs>
         <RadzenTabsItem Text="Grid">
-            <DataGrid></DataGrid>
+            <DataGrid RestaurantDetails="@restaurants"></DataGrid>
         </RadzenTabsItem>
         <RadzenTabsItem Text="Splitter">
-            <Spliter></Spliter>
+            <Spliter RestaurantDetails="@restaurants"></Spliter>
         </RadzenTabsItem>
         <RadzenTabsItem Text="Google Map">
             <RadzenGoogleMap Zoom="4" Style="height:500px" Center="@(new GoogleMapPosition { Lat = 39.5, Lng = -98.35 })">
@@ -47,10 +48,6 @@
         new TabItem { Name = "Google Map", Index = 2 },
         new TabItem { Name = "Drop Zone", Index = 3 }
     };
-    // List<(string,int)> tabs = new List<(string,int)>
-    // {
-    //     ("Grid",0), ("Splitter",1), ("Google Map",2) , ("Drop Zone",3)
-    // };
     [Parameter]
     public string Tab { get; set; }
 
@@ -59,10 +56,15 @@
 
     protected override void OnInitialized()
     {
-        restaurants = RestaurantService.GetRestaurants();
-        cuisines = RestaurantService.GetCuisines();
+        restaurants = restaurantService.GetRestaurants();
+        cuisines = restaurantService.GetCuisines();
     }
-
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        Tab = tabs.Find(t => t.Index == selectedIndex)?.Name.Replace(" ", "") ?? "Grid";
+        navigation.NavigateTo($"/restaurant/dashboard/{Tab}");
+    }
     protected override void OnParametersSet()
     {
         base.OnParametersSet();

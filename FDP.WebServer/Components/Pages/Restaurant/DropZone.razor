@@ -1,15 +1,25 @@
 ﻿<h3>DropZone</h3>
 @using FDP.WebServer.Components.Service.RestaurantApp
-@inject RestaurantService RestaurantService
+@inject RestaurantService restaurantService
+@inject NotificationService notificationService
 
+@* 
 <RadzenDropZoneContainer TItem="MyTask" Data="data"
                          ItemSelector="@ItemSelector"
                          ItemRender="@OnItemRender"
                          CanDrop="@CanDrop"
-                         Drop="@OnDrop">
+                         Drop="@OnDrops"> *@
+<RadzenDropZoneContainer Drop="@(args => OnDrop(args))" TItem="Restaurants" Data="restaurants">
     <ChildContent>
-        <RadzenStack Orientation="Orientation.Horizontal" Gap="1rem" Wrap="FlexWrap.Wrap" class="rz-p-12">
-            <RadzenDropZone Value="Status.NotStarted" class="rz-display-flex rz-flex-column rz-background-color-warning-lighter rz-border-warning-light rz-border-radius-2 rz-p-4" Style="flex: 1; gap: 1rem;">
+        <RadzenStack Orientation="Orientation.Horizontal" Gap="1rem" Wrap="FlexWrap.Wrap" class="rz-p-3">
+            <RadzenCard>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Menu Items</RadzenText>
+                <RadzenTree Data=@cuisines Expand=@OnExpand>
+                    <RadzenTreeLevel TextProperty="@nameof(Cuisines.Name)" />
+                </RadzenTree>
+            </RadzenCard>
+
+            @* <RadzenDropZone  Value="Status.NotStarted" class="rz-display-flex rz-flex-column rz-background-color-warning-lighter rz-border-warning-light rz-border-radius-2 rz-p-4" Style="flex: 1; gap: 1rem;">
                 <RadzenText Text="Not started" TextStyle="TextStyle.Subtitle2" />
             </RadzenDropZone>
 
@@ -23,7 +33,35 @@
 
             <RadzenDropZone Value="Status.Deleted" class="rz-display-flex rz-flex-column rz-background-color-danger-lighter rz-border-danger-light rz-border-radius-2 rz-p-4" Style="flex: 1; gap: 1rem;">
                 <RadzenText Text="Drop here to delete" TextStyle="TextStyle.Subtitle2" />
-            </RadzenDropZone>
+            </RadzenDropZone> *@
+            @foreach (var restaurant in restaurants)
+            {
+                var rest = restaurant;
+                <RadzenDropZone class="rz-display-flex rz-flex-column rz-background-color-success-lighter rz-border-success-light rz-border-radius-2 rz-p-4" Style="flex: 1; gap: 1rem;"
+                                AllowDrop="true" @ondragenter="@(args => onEndRest(args, rest))">
+                    @* <RadzenCard> *@
+                    <ChildContent>
+                        <h4>@rest.Name</h4>
+                        <ul>
+                            @foreach (var item in rest.Menus)
+                            {
+                                <RadzenText @onclick = "@(args => selectedItem(rest,item))" @ondragstart="@(args => onStartItem(args, rest, item))" @ondragend="@(args => onEndItem(args, rest, item))" TextStyle="TextStyle.Subtitle2" draggable="true" class="rz-card rz-variant-filled rz-background-color-primary-light rz-color-on-primary-light">@item.Name</RadzenText>
+                            }
+                        </ul>
+                    </ChildContent>
+                    <Footer >
+                        <div>
+                            <RadzenButton Size="ButtonSize.ExtraSmall" Icon="add" ButtonStyle="ButtonStyle.Success" Click="@(args => CreateItem(rest))" />
+                        </div>
+                    </Footer>
+                    @* Click="@CreateItem" *@
+                    @* </RadzenCard> *@
+
+                </RadzenDropZone>
+            }
+            @* @ondragenter="@(args => onEndRest(args, rest))" *@
+            @* @ondragstart="@(args => onStartRest(args, rest))" *@
+            @* @ondragend="@(args => onEndItem(args, rest, item))" *@
         </RadzenStack>
     </ChildContent>
     <Template>
@@ -32,16 +70,47 @@
 </RadzenDropZoneContainer>
 
 @code {
-    // List<Restaurant> restaurants;
-    // List<string> cuisines;
-    // string selectedCuisine;
-    // DateTime selectedDate = DateTime.Today;
+    List<Restaurants> restaurants;
+    List<Cuisines> cuisines;
+    List<MenuItems> item;
+    string selectedCuisine;
+    IList<MyTask> data;
+    Restaurants startRest;
+    Restaurants selectRest;
+    Restaurants endRest;
+    MenuItems startItem;
 
-    // protected override void OnInitialized()
-    // {
-    //     restaurants = RestaurantService.GetRestaurants();
-    //     cuisines = RestaurantService.GetCuisines();
-    // }
+    protected override void OnInitialized()
+    {
+        restaurants = restaurantService.GetRestaurantsWithCuisines();
+        cuisines = restaurantService.GetCuisinesWithFood();
+        data = Enumerable.Range(0, 5)
+            .Select(i =>
+                new MyTask()
+                {
+                    Id = i,
+                    Name = $"Task{i}",
+                    Status = i < 3 ? Status.NotStarted : Status.Started
+                })
+            .ToList();
+    }
+
+    void OnExpand(TreeExpandEventArgs args)
+    {
+        var category = args.Value as Cuisines;
+
+        args.Children.Data = category.Items;
+        args.Children.TextProperty = "Name";
+        args.Children.HasChildren = (product) => false;
+
+        /* Optional template
+        args.Children.Template = context => builder => {
+            builder.OpenElement(1, "strong");
+            builder.AddContent(2, (context.Value as Product).ProductName);
+            builder.CloseElement();
+            };
+        */
+    }
 
     // Filter items by zone value
     Func<MyTask, RadzenDropZone<MyTask>, bool> ItemSelector = (item, zone) => item.Status == (Status)zone.Value && item.Status != Status.Deleted;
@@ -51,6 +120,12 @@
         // Allow item drop only in the same zone, in "Deleted" zone or in the next/previous zone.
         return request.FromZone == request.ToZone || (Status)request.ToZone.Value == Status.Deleted ||
             Math.Abs((int)request.Item.Status - (int)request.ToZone.Value) == 1;
+    };
+
+    Func<RadzenDropZoneItemEventArgs<Restaurants>, bool> CanDrops = request =>
+    {
+        // Allow item drop only in the same zone, in "Deleted" zone or in the next/previous zone.
+        return request.FromZone.Value != request.ToZone.Value;
     };
 
     void OnItemRender(RadzenDropZoneItemRenderEventArgs<MyTask> args)
@@ -71,7 +146,7 @@
         args.Visible = args.Item.Status != Status.Deleted;
     }
 
-    void OnDrop(RadzenDropZoneItemEventArgs<MyTask> args)
+    void OnDrops(RadzenDropZoneItemEventArgs<MyTask> args)
     {
         if (args.FromZone != args.ToZone)
         {
@@ -87,19 +162,126 @@
         }
     }
 
-    IList<MyTask> data;
-
-    protected override void OnInitialized()
+    void OnDrop(RadzenDropZoneItemEventArgs<Restaurants> args)
     {
-        data = Enumerable.Range(0, 5)
-            .Select(i =>
-                new MyTask()
-                {
-                    Id = i,
-                    Name = $"Task{i}",
-                    Status = i < 3 ? Status.NotStarted : Status.Started
-                })
-            .ToList();
+        var restaurant = args;
+        var slkfd = restaurant;
+        // args.Equals
+        // if (args.Data is MenuItems item)
+        // {
+        //     if (!restaurant.Menus.Any(m => m.Name == item.Name))
+        //     {
+        //         restaurant.Menus.Add(item);
+        //     }
+        // }
+        // else if (args.Data is Cuisines cuisine)
+        // {
+        //     foreach (var ci in cuisine.Items)
+        //     {
+        //         if (!restaurant.Menus.Any(m => m.Name == ci.Name))
+        //         {
+        //             restaurant.Menus.Add(ci);
+        //         }
+        //     }
+        // }
+    }
+
+    void onStartItem(DragEventArgs args, Restaurants restaurants, MenuItems menuItem)
+    {
+        var rest = restaurants.Name;
+        var itemName = menuItem.Name;
+        var startName = startRest;
+        startRest = restaurants;
+        // startItem = menuItem;
+        var endName = endRest;
+        var itemId = args;
+    }
+    void onEndItem(DragEventArgs args, Restaurants restaurants, MenuItems menuItem)
+    {
+        var rest = restaurants.Name;
+        var itemName = menuItem.Name;
+        var startName = startRest;
+        var endName = endRest;
+        var itemId = args;
+        // startItem = menuItem;
+        if (startRest.Id != endRest.Id)
+        {
+            var found = endRest.Menus.Any(m => m.Name == itemName);
+            var remove = startRest.Menus.Any(m => m.Name == itemName);
+            if (!found)
+            {
+                endRest.Menus.Add(menuItem);
+                startRest.Menus.Remove(menuItem);
+            }
+            else
+            {
+                notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Warning, Summary = "Can't add into same restaurant", Duration = 4000 });
+                // Handle case where item already exists
+                // e.g., show a message or update the existing item
+            }
+        }
+
+    }
+    private void selectedItem(Restaurants restaurants, MenuItems item)
+    {
+        startItem = item;
+        selectRest = restaurants;
+        var startName = startRest;
+        var endName = endRest;
+    }
+    private void CreateItem(Restaurants restaurants)
+    {
+        var item = startItem;
+        var selectres = selectRest;
+        var startRes = startRest;
+        var endRes = endRest;
+        data.Add(new MyTask()
+        {
+            Id = data.Max(t => t.Id) + 1,
+            Name = "New Task",
+            Status = Status.NotStarted
+        });
+        // var itemName = menuItem.Name;
+        // all null => please select item.AND if selectRest == null && (startRest.id == endRest.id) allow
+        //
+
+        // if (selectRest!= null && (startRest.Id != endRest.Id))
+        if (selectRest!= null)
+        {
+            var found = restaurants.Menus.Any(m => m.Name == startItem.Name);
+            var remove = selectRest.Menus.Any(m => m.Name == startItem.Name);
+            if (!found)
+            {
+                restaurants.Menus.Add(startItem);
+                //startRest.Menus.Remove(startItem);
+            }
+            else
+            {
+
+                notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Warning, Summary = "Can't add into same restaurant", Duration = 4000 });
+                // Handle case where item already exists
+                // e.g., show a message or update the existing item
+            }
+        }
+        else
+        {
+            notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Info, Summary = "please select item", Duration = 1000 });
+        }
+    }
+
+    void onStartRest(DragEventArgs args, Restaurants restaurants)
+    {
+        var rest = restaurants.Name;
+        startRest = restaurants;
+        var endName = endRest;
+        var itemId = args;
+    }
+    void onEndRest(DragEventArgs args, Restaurants restaurants)
+    {
+        var rest = restaurants.Name;
+        endRest = restaurants;
+        var startName = startRest;
+        var itemId = args;
     }
 
     public class MyTask

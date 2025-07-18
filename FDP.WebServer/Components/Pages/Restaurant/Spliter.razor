@@ -11,12 +11,12 @@
                     50% Min 30px Max 70%
                 </div>
                 <RadzenChart Visible="true">
-                    <RadzenColumnSeries TItem="Restaurant" Data="@restaurants" CategoryProperty="Cuisine" ValueProperty="Rating" Title="Average Ratings" />
+                    <RadzenColumnSeries TItem="Restaurant" Data="@RestaurantDetails" CategoryProperty="Cuisine" ValueProperty="Rating" Title="Average Ratings" />
                 </RadzenChart>
             </RadzenSplitterPane>
             <RadzenSplitterPane>
                 <RadzenChart>
-                    <RadzenDonutSeries Data="@restaurants" CategoryProperty="Cuisine" ValueProperty="Rating" TotalAngle="180" StartAngle="180">
+                    <RadzenDonutSeries Data="@RestaurantDetails" CategoryProperty="Cuisine" ValueProperty="Rating" TotalAngle="180" StartAngle="180">
                         <ChildContent>
                             <RadzenSeriesDataLabels Visible=true />
                         </ChildContent>
@@ -39,14 +39,8 @@
 </RadzenSplitter>
 
 @code {
-    List<Restaurant> restaurants;
-    List<string> cuisines;
+    [Parameter]
+    public List<Restaurant> RestaurantDetails { get; set; } = new();
     string selectedCuisine;
     DateTime selectedDate = DateTime.Today;
-
-    protected override void OnInitialized()
-    {
-        restaurants = RestaurantService.GetRestaurants();
-        cuisines = RestaurantService.GetCuisines();
-    }
 }

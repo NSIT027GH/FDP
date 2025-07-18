@@ -3,7 +3,7 @@
 @inject RestaurantService RestaurantService
 
 <h3>DataGrid</h3>
-<RadzenDataGrid Data="@restaurants" TItem="Restaurant" ColumnWidth="200px">
+<RadzenDataGrid Data="@RestaurantDetails" TItem="Restaurant" ColumnWidth="200px">
     <Columns>
         <RadzenDataGridColumn TItem="Restaurant" Property="Name" Title="Name" />
         <RadzenDataGridColumn TItem="Restaurant" Property="Cuisine" Title="Cuisine" />
@@ -15,14 +15,15 @@
 
 
 @code {
-    List<Restaurant> restaurants;
-    List<string> cuisines;
+    [Parameter]
+    public List<Restaurant> RestaurantDetails { get; set; } = new();
+
     string selectedCuisine;
     DateTime selectedDate = DateTime.Today;
 
-    protected override void OnInitialized()
-    {
-        restaurants = RestaurantService.GetRestaurants();
-        cuisines = RestaurantService.GetCuisines();
-    }
+    // protected override void OnInitialized()
+    // {
+    //     restaurants = RestaurantService.GetRestaurants();
+    //     cuisines = RestaurantService.GetCuisines();
+    // }
 }

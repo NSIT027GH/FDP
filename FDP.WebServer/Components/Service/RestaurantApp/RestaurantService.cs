@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using static FDP.WebServer.Components.Service.RestaurantApp.RestaurantService;
 namespace FDP.WebServer.Components.Service.RestaurantApp
 {
     public class RestaurantService
@@ -74,8 +75,8 @@ namespace FDP.WebServer.Components.Service.RestaurantApp
                     new MenuItem { Name = "Sushi Roll", Price = 17.25 }
                 }
             },
-            new Restaurant 
-            { 
+            new Restaurant
+            {
                 Id = 5,
                 Name = "Burger Haven 5",
                 Location = "Jacksonville, FL",
@@ -84,15 +85,15 @@ namespace FDP.WebServer.Components.Service.RestaurantApp
                 OpeningDate = new DateTime(2018,10,02),
                 Latitude = 38.717883,
                 Longitude = -79.097263,
-                Menus = new List<MenuItem> 
-                { 
+                Menus = new List<MenuItem>
+                {
                     new MenuItem { Name = "Hot Dog", Price = 12.58 },
                     new MenuItem { Name = "Tempura", Price = 19.17 },
-                    new MenuItem { Name = "Burger", Price = 11.55 } 
-                } 
+                    new MenuItem { Name = "Burger", Price = 11.55 }
+                }
             },
-            new Restaurant 
-            { 
+            new Restaurant
+            {
                 Id = 6,
                 Name = "Pasta House 6",
                 Location = "Austin, TX",
@@ -101,15 +102,15 @@ namespace FDP.WebServer.Components.Service.RestaurantApp
                 OpeningDate = new DateTime(2019,07,08),
                 Latitude = 36.14736,
                 Longitude = -70.467493,
-                Menus = new List<MenuItem> 
-                { 
+                Menus = new List<MenuItem>
+                {
                     new MenuItem { Name = "Wonton Soup", Price = 6.88 },
                     new MenuItem { Name = "Donut", Price = 10.48 },
-                    new MenuItem { Name = "Crepe", Price = 6.78 } 
-                } 
+                    new MenuItem { Name = "Crepe", Price = 6.78 }
+                }
             },
-            new Restaurant 
-            { 
+            new Restaurant
+            {
                 Id = 7,
                 Name = "Dragon Wok 7",
                 Location = "Austin, TX",
@@ -118,33 +119,32 @@ namespace FDP.WebServer.Components.Service.RestaurantApp
                 OpeningDate = new DateTime(2014,01,25),
                 Latitude = 41.661079,
                 Longitude = -71.955805,
-                Menus = new List<MenuItem> 
-                { 
-                    new MenuItem { Name = "Momo", Price = 18.88 }, 
+                Menus = new List<MenuItem>
+                {
+                    new MenuItem { Name = "Momo", Price = 18.88 },
                     new MenuItem { Name = "Grilled Fish", Price = 11.77 },
-                    new MenuItem { Name = "Croissant", Price = 19.54 
-                    } 
+                    new MenuItem { Name = "Croissant", Price = 19.54 }
                 }
             },
-            new Restaurant 
-            { 
+            new Restaurant
+            {
                 Id = 8,
-                Name = "Le Petit Chef 8", 
+                Name = "Le Petit Chef 8",
                 Location = "Phoenix, AZ",
                 Rating = 4.6,
                 Cuisine = "Thai",
                 OpeningDate = new DateTime(2016,08,22),
-                Latitude = 42.793914, 
+                Latitude = 42.793914,
                 Longitude = -76.991006,
-                Menus = new  List<MenuItem> 
-                { 
+                Menus = new  List<MenuItem>
+                {
                     new MenuItem { Name = "Vegan Bowl", Price = 6.64 },
                     new MenuItem { Name = "Donut", Price = 11.26 },
-                    new MenuItem { Name = "Dosa", Price = 12.96 } 
-                } 
+                    new MenuItem { Name = "Dosa", Price = 12.96 }
+                }
             },
-            new Restaurant 
-            { 
+            new Restaurant
+            {
                 Id = 9,
                 Name = "Biryani Express 9",
                 Location = "Houston, TX",
@@ -153,32 +153,32 @@ namespace FDP.WebServer.Components.Service.RestaurantApp
                 OpeningDate = new DateTime(2022,10,18),
                 Latitude = 36.372398,
                 Longitude = -76.264354,
-                Menus = new List<MenuItem> 
-                { 
+                Menus = new List<MenuItem>
+                {
                     new MenuItem { Name = "Grilled Fish", Price = 19.59 },
-                    new MenuItem { Name = "Saffron Lounge", Price = 12.03 }
-                    , new MenuItem { Name = "Wonton Soup", Price = 5.88 } 
-                } 
+                    new MenuItem { Name = "Saffron Lounge", Price = 12.03 },
+                    new MenuItem { Name = "Wonton Soup", Price = 5.88 }
+                }
             },
-            new Restaurant 
-            { 
+            new Restaurant
+            {
                 Id = 10,
                 Name = "Pho Garden 10",
                 Location = "Los Angeles, CA",
                 Rating = 4.4,
-                Cuisine = "Greek", 
+                Cuisine = "Greek",
                 OpeningDate = new DateTime(2019,06,14),
-                Latitude = 37.289256, 
+                Latitude = 37.289256,
                 Longitude = -71.048471,
                 Menus = new List<MenuItem>
-                { 
-                    new MenuItem { Name = "Baklava", Price = 18.45 }, 
+                {
+                    new MenuItem { Name = "Baklava", Price = 18.45 },
                     new MenuItem { Name = "Pad Thai", Price = 11.7 },
-                    new MenuItem { Name = "Momo" , Price = 6.88 } 
-                } 
+                    new MenuItem { Name = "Momo" , Price = 6.88 }
+                }
             },
-            new Restaurant 
-            { 
+            new Restaurant
+            {
                 Id = 11,
                 Name = "Curry Junction 11",
                 Location = "Phoenix, AZ",
@@ -187,15 +187,15 @@ namespace FDP.WebServer.Components.Service.RestaurantApp
                 OpeningDate = new DateTime(2012,01,06),
                 Latitude = 37.174197,
                 Longitude = -77.236332,
-                Menus = new List<MenuItem> 
-                { 
+                Menus = new List<MenuItem>
+                {
                     new MenuItem { Name = "Grilled Fish", Price = 18.4 },
                     new MenuItem { Name = "Wrap", Price = 14.67 },
-                    new MenuItem { Name = "Ramen", Price = 10.33 } 
-                } 
+                    new MenuItem { Name = "Ramen", Price = 10.33 }
+                }
             },
-            new Restaurant 
-            { 
+            new Restaurant
+            {
                 Id = 12,
                 Name = "Pizza Villa 12",
                 Location = "Jacksonville, FL",
@@ -204,12 +204,12 @@ namespace FDP.WebServer.Components.Service.RestaurantApp
                 OpeningDate = new DateTime(2021,01,08),
                 Latitude = 38.37677,
                 Longitude = -77.222705,
-                Menus = new List<MenuItem> 
-                { 
-                    new MenuItem { Name = "Pizza", Price = 19.88 }, 
+                Menus = new List<MenuItem>
+                {
+                    new MenuItem { Name = "Pizza", Price = 19.88 },
                     new MenuItem { Name = "Naan", Price = 10.12 },
-                    new MenuItem { Name = "Falafel", Price = 17.94 } 
-                } 
+                    new MenuItem { Name = "Falafel", Price = 17.94 }
+                }
             },
 
         };
@@ -224,6 +224,58 @@ namespace FDP.WebServer.Components.Service.RestaurantApp
             var restaurants = GetRestaurants();
             return restaurants.ConvertAll(r => r.OpeningDate);
         }
+
+        public List<Restaurants> GetRestaurantsWithCuisines()
+        {
+            return new List<Restaurants>
+            {
+                new Restaurants { Id = 1, Name = "Casa Bella", Location = "New York", Menus = new List<MenuItems>
+                    {
+                        new MenuItems { Name = "Margherita Pizza", Price = 12.99 },
+                        new MenuItems { Name = "Pasta Carbonara", Price = 14.49 },
+                        new MenuItems { Name = "Tiramisu", Price = 6.75 }
+                    } },
+                new Restaurants { Id = 2, Name = "Sakura Spot", Location = "San Francisco", Menus = new List<MenuItems>() },
+                new Restaurants { Id = 3, Name = "El Ranchero", Location = "Houston", Menus = new List<MenuItems>() }
+            };
+        }
+        public List<Cuisines> GetCuisinesWithFood()
+        {
+            return new List<Cuisines>
+            {
+                new Cuisines
+                {
+                    Name = "Italian",
+                    Items = new List<MenuItems>
+                    {
+                        new MenuItems { Name = "Margherita Pizza", Price = 12.99 },
+                        new MenuItems { Name = "Pasta Carbonara", Price = 14.49 },
+                        new MenuItems { Name = "Tiramisu", Price = 6.75 }
+                    }
+                },
+                new Cuisines
+                {
+                    Name = "Japanese",
+                    Items = new List<MenuItems>
+                    {
+                        new MenuItems { Name = "Sushi Roll", Price = 13.99 },
+                        new MenuItems { Name = "Ramen", Price = 11.5 },
+                        new MenuItems { Name = "Tempura", Price = 9.99 }
+                    }
+                },
+                new Cuisines
+                {
+                    Name = "Mexican",
+                    Items = new List<MenuItems>
+                    {
+                        new MenuItems { Name = "Tacos", Price = 9.49 },
+                        new MenuItems { Name = "Burrito", Price = 10.5 },
+                        new MenuItems { Name = "Churros", Price = 5.99 }
+                    }
+                }
+            };
+        }
+
     }
 
     public class Restaurant
@@ -246,4 +298,26 @@ namespace FDP.WebServer.Components.Service.RestaurantApp
     }
 
 
+    public class Cuisines
+    {
+        //public int Id { get; set; }
+        //public int RestaurantId { get; set; }
+
+        public string Name { get; set; } = string.Empty;
+        public List<MenuItems> Items { get; set; } = new();
+    }
+
+    public class MenuItems
+    {
+        public string Name { get; set; } = string.Empty;
+        public double Price { get; set; }
+    }
+
+    public class Restaurants
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Location { get; set; } = string.Empty;
+        public List<MenuItems> Menus { get; set; } = new();
+    }
 }
